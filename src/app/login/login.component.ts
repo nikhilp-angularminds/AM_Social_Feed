@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
        return;
     }
     console.log(this.loginForm.value);
-     this.service.post('login',this.loginForm.value).subscribe((data:any)=>{
+     this.service.post('user/login',this.loginForm.value).subscribe((data:any)=>{
       console.log(data);
     })
     this.router.navigate(['feed']);

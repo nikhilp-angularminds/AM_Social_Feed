@@ -9,6 +9,8 @@ import { LoginComponent } from './login/login.component';
 import { HttpClientModule} from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component'
+import { AvatarModule } from 'ngx-avatars';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
@@ -17,13 +19,15 @@ import { NavComponent } from './nav/nav.component'
     LoginComponent,
     HomeComponent,
     NavComponent,
+    EditComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AvatarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
