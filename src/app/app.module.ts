@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component'
 import { AvatarModule } from 'ngx-avatars';
 import { EditComponent } from './edit/edit.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { EditComponent } from './edit/edit.component';
     FormsModule,
     HttpClientModule,
     AvatarModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

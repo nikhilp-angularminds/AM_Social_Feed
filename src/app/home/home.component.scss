@@ -1,0 +1,42 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    // background-color: #EFEFEF;
+    height: 100vh;
+}
+.card-title{
+    width: 600px;
+    height: 55px;
+}
+.card-img-top{
+    width: 600px;
+    height: 449px;
+    border-top: 1px solid rgba(0,0,0,.125);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+
+}
+.fcard{
+    width: 600px !important;
+}
+.card-body1{
+    width: 600px;
+    height: 38px;
+    margin-left: 15px
+}
+.card-body2{
+    width: 568px;
+    height: 18px;
+    margin-left: 15px
+
+}
+.card-body3{
+    width: 568px;
+    height:36px ;
+    margin-left: 15px
+}
+.icon{
+    width:30px
+}
+.icon i{
+    margin-top: 8px;
+}

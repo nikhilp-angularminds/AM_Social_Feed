@@ -10,6 +10,7 @@ import { HttpService } from '../services/http.service';
 export class LoginComponent implements OnInit {
   loginForm:FormGroup
   submitted:boolean=false
+  token:any
   constructor(private service:HttpService, private router:Router, private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -20,6 +21,10 @@ export class LoginComponent implements OnInit {
         Validators.minLength(6),
         ]]
     });
+    this.token=localStorage.getItem("token")
+    if(this.token){
+      this.router.navigate(['feed'])
+    }
   }
   get f(){
     return this.loginForm.controls;
@@ -30,8 +35,13 @@ export class LoginComponent implements OnInit {
        return;
     }
     console.log(this.loginForm.value);
-     this.service.post('user/login',this.loginForm.value).subscribe((data:any)=>{
+     this.service.post('/login',this.loginForm.value).subscribe((data:any)=>{
       console.log(data);
+      if(data){
+        localStorage.setItem("token",data.token);
+        localStorage.setItem("user",JSON.stringify(data.user));
+
+      }
     })
     this.router.navigate(['feed']);
 

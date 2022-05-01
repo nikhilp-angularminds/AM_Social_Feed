@@ -12,6 +12,7 @@ export class SignUpComponent implements OnInit {
   submitted:boolean=false
   errMsg:any
   err:boolean=false
+  token:any
   constructor(private service:HttpService, private router:Router, private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -24,6 +25,10 @@ export class SignUpComponent implements OnInit {
         Validators.minLength(6),
         ]]
     });
+    this.token=localStorage.getItem("token")
+    if(this.token){
+      this.router.navigate(['feed'])
+    }
   }
   get f(){
     return this.signUpForm.controls;
@@ -35,7 +40,7 @@ export class SignUpComponent implements OnInit {
        return;
     }
     console.log(this.signUpForm.value);
-    this.service.post('user',this.signUpForm.value).subscribe((data:any)=>{
+    this.service.post('/signup',this.signUpForm.value).subscribe((data:any)=>{
       console.log(data);
 
       if(data.success==false){
@@ -49,6 +54,7 @@ export class SignUpComponent implements OnInit {
     this.router.navigate(['/login'])
       }
     })
+
   }
 
 }

@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  baseUrl:"http://192.168.0.120:3000/api/"
+  baseUrl:"http://localhost:3000"
 };
+
+// http://192.168.0.102:7000/user/signup
 
 /*
  * For easier debugging in development mode, you can import the following file
