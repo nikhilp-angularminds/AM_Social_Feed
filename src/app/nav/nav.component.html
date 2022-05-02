@@ -8,7 +8,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link text-black">Home</a>
+        <a routerLink="/feed" class="nav-link text-black">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-black" type="button" (click)="open(content)">Add Post</a>
@@ -24,7 +24,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" routerLink="/edit-profile" href="#">Edit Profile</a></li>
             <li><button class="dropdown-item" (click)="open(content1)">Change password</button></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" (click)="logout()" href="#">Logout</a></li>
           </ul>
         </div>
       </li>
@@ -41,23 +41,35 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="changePassForm">
       <div class="form-group">
         <label for="exampleInputEmail1">Current Password</label>
-        <input type="password" class="form-control" id="" aria-describedby="" placeholder="Enter Name">
+        <input type="password" formControlName="currentPassword" class="form-control" id="" aria-describedby="" placeholder="Enter Name"
+        [ngClass]="{ 'is-invalid': submitted && c['currentPassword'].errors }">
+        <div *ngIf="c['currentPassword'].touched && c['currentPassword'].invalid" class="alert alert-danger">
+          <div *ngIf="c['currentPassword'].errors && c['currentPassword'].errors['required']">Current Password required.</div>
+        </div>
       </div>
       <div class="form-group">
         <label for="exampleInputEmail1">New Password</label>
-        <input type="password" class="form-control" id="" aria-describedby="" placeholder="Enter Name">
+        <input type="password" formControlName="newPassword" class="form-control" id="" aria-describedby="" placeholder="Enter Name"
+        [ngClass]="{ 'is-invalid': submitted && c['newPassword'].errors }">
+        <div *ngIf="c['newPassword'].touched && c['newPassword'].invalid" class="alert alert-danger">
+          <div *ngIf="c['newPassword'].errors && c['newPassword'].errors['required']">New Password is required.</div>
+        </div>
       </div>
       <div class="form-group">
         <label for="exampleInputEmail1">Confirm Password</label>
-        <input type="password" class="form-control" id="" aria-describedby="" placeholder="Enter Name">
+        <input type="password" formControlName="confirmPassword" class="form-control" id="" aria-describedby="" placeholder="Enter Name"
+        [ngClass]="{ 'is-invalid': submitted && c['confirmPassword'].errors }">
+        <div *ngIf="c['confirmPassword'].touched && c['confirmPassword'].invalid" class="alert alert-danger">
+          <div *ngIf="c['confirmPassword'].errors && c['confirmPassword'].errors['required']">Confirm Password is required.</div>
+        </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="onSubmit1()" (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>
 
@@ -77,10 +89,10 @@
               alt="avatar">
             <h6>Upload a different photo...</h6>
 
-            <input type="file" (change)="onUploadChange($event)" formControlName="file" class="form-control" 
-            [ngClass]="{ 'is-invalid': submitted && f['file'].errors }">
-            <div *ngIf="f['file'].touched && f['file'].invalid" class="alert alert-danger">
-              <div *ngIf="f['file'].errors && f['file'].errors['required']">lastName is required.</div>
+            <input type="file" (change)="onFileSelected($event)" formControlName="img" class="form-control" 
+            [ngClass]="{ 'is-invalid': submitted && f['img'].errors }">
+            <div *ngIf="f['img'].touched && f['img'].invalid" class="alert alert-danger">
+              <div *ngIf="f['img'].errors && f['img'].errors['required']">file is required.</div>
           </div>
           </div>
         </div>
@@ -90,7 +102,7 @@
             <textarea class="form-control" id="exampleFormControlTextarea1" formControlName="caption" placeholder="Enter Bio" rows="3"
             [ngClass]="{ 'is-invalid': submitted && f['caption'].errors }"></textarea>
             <div *ngIf="f['caption'].touched && f['caption'].invalid" class="alert alert-danger">
-              <div *ngIf="f['caption'].errors && f['caption'].errors['required']">lastName is required.</div>
+              <div *ngIf="f['caption'].errors && f['caption'].errors['required']">caption is required.</div>
           </div>
           </div>
         </div>

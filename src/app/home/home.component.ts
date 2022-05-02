@@ -20,5 +20,13 @@ export class HomeComponent implements OnInit {
     this.userData=JSON.parse(this.userData)
     console.log(this.userData)
   }
+ 
+  onLikes(index:any){
+    console.log(index)
+    this.service.put(`/${this.postArr[index]._id}/like`,this.userData._id).subscribe((data)=>{
+      console.log(data)
+    })
+    // 626ceebd77198639072eeadb/like
 
+  }
 }

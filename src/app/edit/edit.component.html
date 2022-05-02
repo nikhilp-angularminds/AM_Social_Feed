@@ -12,7 +12,7 @@
             alt="avatar">
           <h6>Upload a different photo...</h6>
 
-          <input type="file" formControlName="img" class="form-control">
+          <input type="file" (change)="onFileSelected($event)"  formControlName="img" class="form-control">
         </div>
       </div>
 
@@ -78,15 +78,15 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="exampleInputEmail1">Mobile No:</label>
-                <input type="text" formControlName="mobile" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                <input type="text" formControlName="mobileNumber" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                   placeholder="Enter Mobile">
-                  <div class="alert alert-danger"  *ngIf="f['mobile'].errors && f['mobile'].errors['required']">
+                  <!-- <div class="alert alert-danger"  *ngIf="f['mobile'].errors && f['mobile'].errors['required']">
                     Mobile is Required!
                   </div>
               
                   <div class="alert alert-danger" *ngIf="f['mobile'].errors && f['mobile'].errors['pattern']">
                     Mobile No must be 10 digit!
-                  </div>
+                  </div> -->
               </div>
             </div>
           </div>

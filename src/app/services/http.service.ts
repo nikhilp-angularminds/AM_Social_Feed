@@ -18,15 +18,26 @@ export class HttpService {
   post(url:string,payload:any){
     return this.http.post(`${this.baseUrl}${url}`,payload)
   }
+
+  securePost(url:string,payload:any){
+    const headers = { 'Authorization': this.token }
+    return this.http.post(`${this.baseUrl}${url}`,payload,{ headers })
+
+  }
   
   secureGet(url:any){
-    const headers = { 'auth-token': this.token }
+    const headers = { 'Authorization': this.token }
     return this.http.get(`${this.baseUrl}${url}`,{ headers })
   }
 
   put(url:string,payload:any){
-    const headers = { 'auth-token': this.token }
+    const headers = { 'Authorization': this.token }
     return this.http.put(`${this.baseUrl}${url}`,payload,{ headers })
+  }
+  patch(url:string,payload:any){
+    const headers = { 'Authorization': this.token }
+   
+    return this.http.patch(`${this.baseUrl}${url}`,payload,{headers})
   }
   
 
