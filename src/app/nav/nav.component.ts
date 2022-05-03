@@ -25,6 +25,10 @@ export class NavComponent implements OnInit {
   formData = new FormData();
   img:any
   postArr:any
+  passErr:any
+  imgage:any
+  ediName:any
+  password:boolean=false
   constructor(private http:HttpClient, private service:HttpService, private router: Router, private fb: FormBuilder, private modalService: NgbModal) { }
 
   ngOnInit(): void {
@@ -34,7 +38,8 @@ export class NavComponent implements OnInit {
     this.addPostForm = this.fb.group({
       img: ['', Validators.required],
       caption: ['', Validators.required],
-      userId: [this.userData._id]
+      userId: [this.userData._id],
+      userName:this.userData.name
 
     });
     this.changePassForm=this.fb.group({
@@ -43,6 +48,14 @@ export class NavComponent implements OnInit {
       confirmPassword:['',Validators.required]
     })
 
+  }
+  getEditData(){
+
+    this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
+      console.log(data);
+      this.imgage=data.img
+      this.ediName=data.name
+    })
   }
   get f() {
     return this.addPostForm.controls;
@@ -77,6 +90,14 @@ export class NavComponent implements OnInit {
     localStorage.clear()
     this.router.navigate(['login'])
   }
+  getAllData(){
+    this.service.secureGet("?page=1&limit=20").subscribe((data:any)=>{
+      console.log(data)
+      this.postArr=data.results
+      this.postArr=this.postArr.reverse()
+
+    })
+  }
   onSubmit() {
     this.submitted = true
     if (this.addPostForm.invalid) {
@@ -84,14 +105,13 @@ export class NavComponent implements OnInit {
     }
     this.formData.append("caption",JSON.stringify(this.addPostForm.value.caption))
     this.formData.append("userId",JSON.stringify(this.addPostForm.value.userId))
+    this.formData.append("userName",JSON.stringify(this.addPostForm.value.userName))
   
     this.service.securePost("/uploadImage",this.formData).subscribe((data)=>{
       console.log(data)
+      this.getAllData();
     })
-    this.service.secureGet("?page=1&limit=10").subscribe((data:any)=>{
-      console.log(data)
-      this.postArr=data.results
-    })
+   
     console.log(this.addPostForm.value);
     this.submitted=false
   }
@@ -105,9 +125,12 @@ export class NavComponent implements OnInit {
   console.log(this.changePassForm.value);
   this.service.patch(`/changePassword/${this.userData._id}`,this.changePassForm.value).subscribe((data)=>{
       console.log(data);
-      this.changePassForm.reset()
+     this.password=false
   },(err)=>{
-    console.log(err.error)
+    if(err.error){
+      this.passErr=err.error
+      this.password=true
+    }
   })
   }
 }

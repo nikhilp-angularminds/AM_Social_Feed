@@ -17,8 +17,8 @@
 
     <ul class="list-unstyled ms-auto mx-5">
       <li class="p-3">
-        <div class="dropdown dropstart">
-          <ngx-avatars class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" name={{userData.name}}
+        <div class="dropdown dropstart mt-3">
+          <ngx-avatars class="dropdown-toggle" src="http://localhost:8000/{{imgage}}" data-bs-toggle="dropdown" aria-expanded="false" name={{userData.name}}
             size="40" [round]="true">
           </ngx-avatars>
           <ul class="dropdown-menu">
@@ -66,6 +66,11 @@
           <div *ngIf="c['confirmPassword'].errors && c['confirmPassword'].errors['required']">Confirm Password is required.</div>
         </div>
       </div>
+      <div *ngIf="passErr">
+        <div class="alert alert-danger">
+          <p>{{passErr}}</p>
+        </div>
+      </div>
     </form>
   </div>
   <div class="modal-footer">
@@ -96,7 +101,7 @@
           </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mt-3">
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Caption:</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" formControlName="caption" placeholder="Enter Bio" rows="3"

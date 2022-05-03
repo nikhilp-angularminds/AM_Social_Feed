@@ -6,45 +6,51 @@
             <div *ngFor="let item of postArr;let i=index" class="col-md-12 d-flex justify-content-center mb-4">
                 <div class="fcard card" style="width: 18rem;">
                     <h5 class="card-title d-flex align-items-center ms-3">{{userData.name}}</h5>
-                    <img class="card-img-top" src="http://localhost:8000/{{item.img}}" alt="Card image cap">
+                    <img class="card-img-top" src="http://localhost:8000/{{item.img}}" alt="">
                     <div class="card-body1 d-flex">
                       <div class="icon">
-                        <a (click)="onLikes(i)">
-                        <i class="fa fa-heart" aria-hidden="true"></i> 
-
+                        <a  (click)="onLikes(i)">
+                        <i *ngIf="item._id!=id" class="fa fa-heart"  aria-hidden="true"></i> 
+                        <i *ngIf="item._id==id" [ngClass]="[ like ? 'fa fa-heart my_class' : 'fa fa-heart']"  aria-hidden="true"></i> 
                         </a>
                       </div>
                       <div class="icon">
-                        <i class="fa fa-comment" aria-hidden="true"></i>
+                        <a (click)="hide(i)">
+                          <i class="fa fa-comment"  aria-hidden="true"></i>
+                        </a>
+                       </div>
+                    </div>
+                    <div *ngIf="hideCard && index1==i" class="card-text ms-3">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p class="m-1" *ngFor="let comments of item.comments">
+                           <span class="fw-bold">comment:</span> {{comments.comment}}
+                           </p>
+                        </div>
+                     </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input type="text" #comment class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button (click)="addComment(comment.value,i)" class="btn btn-primary">Add Comment</button>
+                        </div>
                       </div>
                     </div>
                     <div class="card-body2 d-flex">
                         <div>
-                            345 likes
+                          <span *ngIf="item._id!=id" class="me-1">0 likes</span> 
+                          <span *ngIf="item._id==id" class="me-1">{{likes}} likes</span> 
                         </div>
                     </div>
                     <div class="card-body3 mt-2">
-                    <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userData.name}}</span> {{item.caption}} </p>
+                    <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userData.name}} :</span> {{item.caption}} </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-<ng-template #content1 let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Change Password</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <div class="modal-body">
-    <form>
-      <div class="form-group">
-        <label for="exampleFormControlTextarea1">Add Comment</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-      </div>
-    </form>
-  </div>
-  <!-- <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" ((click)="modal.close('Save click')">Save</button>
-  </div> -->
-</ng-template>
+

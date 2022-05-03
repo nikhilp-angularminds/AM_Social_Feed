@@ -12,6 +12,7 @@ export class EditComponent implements OnInit {
    editForm:FormGroup
    submitted:boolean=false
    userData:any
+   img:any
   formData = new FormData();
 
   constructor(private service:HttpService, private fb:FormBuilder) { }
@@ -35,9 +36,16 @@ export class EditComponent implements OnInit {
 
     this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
       console.log(data);
+      this.img=JSON.parse(data.img)
       this.editForm.patchValue({
         name:data.name,
-        email:data.email
+        email:data.email,
+        bio:data.bio,
+        gender:data.gender,
+        dob:data.dob,
+        img:data.img,
+        mobileNumber:data.mobileNumber
+
       })
     })
   }
