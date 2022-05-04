@@ -50,6 +50,30 @@ export class HomeComponent implements OnInit {
       // this.loadNextPost();
      }
   }
+
+  // loadNextPost() {
+  //   const url = 'http://tlino.96.lt/api/getnextpost';
+  //   // return last post from the array
+  //   const lastPost = this.postArr[this.postArr.length - 1];
+  //   // get id of last post
+  //   const lastPostId = lastPost.id;
+  //   // sent this id as key value pare using formdata()
+  //   const dataToSend = new FormData();
+  //   dataToSend.append('id', lastPostId);
+  //   // call http request
+  //   this.service.securePost("/uploadImage", dataToSend)
+  //   .subscribe( (data: any) => {
+  //      const newPost = data[0];
+  
+  //      if (newPost.length === 0 ) {
+  //        this.notEmptyPost =  false;
+  //      }
+  //      // add newly fetched posts to the existing post
+  //      this.postArr = this.postArr.concat(newPost);
+  //      this.notscrolly = true;
+  //    });
+  // }
+
     getEditData(){
     this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
          console.log(data);

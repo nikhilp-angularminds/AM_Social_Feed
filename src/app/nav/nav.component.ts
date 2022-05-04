@@ -107,7 +107,7 @@ export class NavComponent implements OnInit {
       return;
     }
     this.formData.append("caption", JSON.stringify(this.addPostForm.value.caption))
-    this.formData.append("userId", JSON.stringify(this.addPostForm.value.userId))
+    this.formData.append("userId", this.addPostForm.value.userId)
     this.formData.append("userName", JSON.stringify(this.addPostForm.value.userName))
 
     this.service.securePost("/uploadImage", this.formData).subscribe((data) => {

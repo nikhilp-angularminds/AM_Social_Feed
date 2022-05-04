@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl:"http://localhost:8000"
+  baseUrl:"http://localhost:3000"
 };
 
 // http://192.168.0.102:7000/user/signup

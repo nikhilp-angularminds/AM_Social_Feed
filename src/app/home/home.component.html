@@ -11,8 +11,8 @@
         <div class="fcard card" style="width: 18rem;">
           <div *ngIf="!isLoading; else loadingContent" class="d-flex">
             <div class="card-title d-flex align-items-center ms-2">
-              <ngx-avatars class="" src="http://localhost:8000/{{image}}" data-bs-toggle="dropdown"
-                aria-expanded="false" name={{userName}} size="30" [round]="true">
+              <ngx-avatars class="" src="http://localhost:3000/{{item.userImg}}" data-bs-toggle="dropdown"
+                aria-expanded="false" name={{item.userName}} size="30" [round]="true">
               </ngx-avatars>
             </div>
             <div>
@@ -31,7 +31,7 @@
             <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
           </ng-template>
          
-          <img *ngIf="!isLoading; else loadingContent" class="card-img-top" src="http://localhost:8000/{{item.img}}" alt="">
+          <img *ngIf="!isLoading; else loadingContent" class="card-img-top" src="http://localhost:3000/{{item.img}}" alt="">
           <ng-template #loadingContent>
             <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
             <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
