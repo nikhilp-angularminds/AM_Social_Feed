@@ -18,7 +18,7 @@
     <ul class="list-unstyled ms-auto mx-5">
       <li class="p-3">
         <div class="dropdown dropstart mt-3">
-          <ngx-avatars class="dropdown-toggle" src="http://localhost:8000/{{imgage}}" data-bs-toggle="dropdown" aria-expanded="false" name={{userData.name}}
+          <ngx-avatars class="dropdown-toggle" src="http://localhost:3000/{{imgage}}" data-bs-toggle="dropdown" aria-expanded="false" name={{userData.name}}
             size="40" [round]="true">
           </ngx-avatars>
           <ul class="dropdown-menu">
@@ -74,7 +74,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="onSubmit1()" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="changePass()" (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>
 
@@ -115,6 +115,6 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="onSubmit()"  (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="addPost()"  (click)="modal.close('Save click')">Save</button>
   </div>
 </ng-template>

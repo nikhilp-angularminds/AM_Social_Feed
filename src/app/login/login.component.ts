@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { HttpService } from '../services/http.service';
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ export class LoginComponent implements OnInit {
   loginForm:FormGroup
   submitted:boolean=false
   token:any
-  constructor(private service:HttpService, private router:Router, private fb: FormBuilder) { }
+  constructor(private toastr: ToastrService,private service:HttpService, private router:Router, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -37,6 +38,8 @@ export class LoginComponent implements OnInit {
     console.log(this.loginForm.value);
      this.service.post('/login',this.loginForm.value).subscribe((data:any)=>{
       console.log(data);
+    this.toastr.success('login successully!', 'Success!');
+
       if(data){
         localStorage.setItem("token",data.token);
         localStorage.setItem("user",JSON.stringify(data.user));

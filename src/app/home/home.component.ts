@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../services/http.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, pipe } from 'rxjs';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,10 +16,20 @@ export class HomeComponent implements OnInit {
   like: boolean = false
   id: any
   index1: any
-  constructor(private router: Router, private service: HttpService) { }
+  userName:any
+  image:any
+  isLoading:boolean=false
+  notEmptyPost = true;
+  notscrolly = true;
+  constructor(private toastr: ToastrService,private router: Router, private service: HttpService) { }
 
+  // showSuccess() {
+  //   this.toastr.success('Hello world!', 'Success!');
+  // }
   ngOnInit(): void {
     // ?page=1&limit=2
+    this.isLoading=true
+
     console.log(this.likes)
     if (this.likes === 1) {
       this.like = true
@@ -28,18 +40,45 @@ export class HomeComponent implements OnInit {
     this.getAllPost();
     this.userData = localStorage.getItem("user")
     this.userData = JSON.parse(this.userData)
+    this.userName=this.userData.name
     console.log(this.userData)
+    this.getEditData();
   }
+  onScroll() {
+    if (this.notscrolly && this.notEmptyPost) {
+      this.notscrolly = false;
+      // this.loadNextPost();
+     }
+  }
+    getEditData(){
+    this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
+         console.log(data);
+        if(data){
+          this.image=data.img
+          this.userName=JSON.parse(data.name)
+          console.log(this.image)
+          console.log(this.userName)
+        }
+       })
+     }
  
   getAllPost(){
-    this.service.secureGet("?page=1&limit=20").subscribe((data: any) => {
-      console.log(data)
-      this.postArr = data.results
-      this.postArr=this.postArr.reverse()
-      console.log(this.postArr);
-    }, (err) => {
-      console.log(err)
-    })
+    setTimeout(()=>{
+      this.service.secureGet("?page=1&limit=20").subscribe((data: any) => {
+        console.log(data)
+        this.postArr = data.results
+        this.postArr=this.postArr.reverse()
+        console.log(this.postArr);
+      }, (err) => {
+        console.log(err)
+      })
+    },1000)
+    setTimeout(()=>{
+      this.isLoading=true
+    },2000)
+    setTimeout(()=>{
+      this.isLoading=false
+    },3000)
   }
   onLikes(index: any) {
     // console.log(index)

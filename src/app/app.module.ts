@@ -12,7 +12,9 @@ import { NavComponent } from './nav/nav.component'
 import { AvatarModule } from 'ngx-avatars';
 import { EditComponent } from './edit/edit.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { ToastrModule } from 'ngx-toastr';
+import { NgxSkeletonModule } from 'ngx-skeleton';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +32,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     AvatarModule,
     NgbModule,
+    InfiniteScrollModule,
+    NgxSkeletonModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

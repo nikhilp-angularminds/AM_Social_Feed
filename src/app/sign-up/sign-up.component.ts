@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { HttpService } from '../services/http.service';
 @Component({
   selector: 'app-sign-up',
@@ -13,7 +14,7 @@ export class SignUpComponent implements OnInit {
   errMsg:any
   err:boolean=false
   token:any
-  constructor(private service:HttpService, private router:Router, private fb: FormBuilder) { }
+  constructor(private toastr: ToastrService,private service:HttpService, private router:Router, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -42,6 +43,7 @@ export class SignUpComponent implements OnInit {
     console.log(this.signUpForm.value);
     this.service.post('/signup',this.signUpForm.value).subscribe((data:any)=>{
       console.log(data);
+      this.toastr.success('Registered successully!', 'Success!');
 
       if(data.success==false){
         this.err=true

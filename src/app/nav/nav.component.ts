@@ -6,6 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { ReadVarExpr } from '@angular/compiler';
 import { HttpService } from '../services/http.service';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -14,22 +15,22 @@ import { HttpClient } from '@angular/common/http';
 export class NavComponent implements OnInit {
   closeResult = '';
   addPostForm: FormGroup
-  changePassForm:FormGroup
+  changePassForm: FormGroup
   submitted: boolean = false
   imageError: any;
   isImageSaved: boolean;
   cardImageBase64: string;
   userData: any
-  base64Output: string; 
-  imagesrc: any 
+  base64Output: string;
+  imagesrc: any
   formData = new FormData();
-  img:any
-  postArr:any
-  passErr:any
-  imgage:any
-  ediName:any
-  password:boolean=false
-  constructor(private http:HttpClient, private service:HttpService, private router: Router, private fb: FormBuilder, private modalService: NgbModal) { }
+  img: any
+  postArr: any
+  passErr: any
+  imgage: any
+  ediName: any
+  password: boolean = false
+  constructor(private toastr: ToastrService, private http: HttpClient, private service: HttpService, private router: Router, private fb: FormBuilder, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.userData = localStorage.getItem("user")
@@ -39,22 +40,24 @@ export class NavComponent implements OnInit {
       img: ['', Validators.required],
       caption: ['', Validators.required],
       userId: [this.userData._id],
-      userName:this.userData.name
+      userName: this.userData.name
 
     });
-    this.changePassForm=this.fb.group({
-      currentPassword:['',Validators.required],
-      newPassword:['',Validators.required],
-      confirmPassword:['',Validators.required]
+    this.changePassForm = this.fb.group({
+      currentPassword: ['', Validators.required],
+      newPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     })
-
+    this.getEditData()
   }
-  getEditData(){
-
-    this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
+  getEditData() {
+    this.service.secureGet(`/user/${this.userData._id}`).subscribe((data: any) => {
       console.log(data);
-      this.imgage=data.img
-      this.ediName=data.name
+      this.imgage = data.img
+      this.ediName = data.name
+      console.log(this.imgage)
+      console.log(this.ediName)
+
     })
   }
   get f() {
@@ -81,57 +84,61 @@ export class NavComponent implements OnInit {
     }
   }
 
-  onFileSelected(event:any) {
-          this.formData.append("img", event.target.files[0]);
-          console.log(event.target.files[0])
+  onFileSelected(event: any) {
+    this.formData.append("img", event.target.files[0]);
+    console.log(event.target.files[0])
   }
-  
- logout() {
-    localStorage.clear()
+
+  logout() {
+    localStorage.removeItem('user')
     this.router.navigate(['login'])
   }
-  getAllData(){
-    this.service.secureGet("?page=1&limit=20").subscribe((data:any)=>{
+  getAllData() {
+    this.service.secureGet("?page=1&limit=20").subscribe((data: any) => {
       console.log(data)
-      this.postArr=data.results
-      this.postArr=this.postArr.reverse()
+      this.postArr = data.results
+      this.postArr = this.postArr.reverse()
 
     })
   }
-  onSubmit() {
+  addPost() {
     this.submitted = true
     if (this.addPostForm.invalid) {
       return;
     }
-    this.formData.append("caption",JSON.stringify(this.addPostForm.value.caption))
-    this.formData.append("userId",JSON.stringify(this.addPostForm.value.userId))
-    this.formData.append("userName",JSON.stringify(this.addPostForm.value.userName))
-  
-    this.service.securePost("/uploadImage",this.formData).subscribe((data)=>{
+    this.formData.append("caption", JSON.stringify(this.addPostForm.value.caption))
+    this.formData.append("userId", JSON.stringify(this.addPostForm.value.userId))
+    this.formData.append("userName", JSON.stringify(this.addPostForm.value.userName))
+
+    this.service.securePost("/uploadImage", this.formData).subscribe((data) => {
       console.log(data)
+      this.toastr.success('New post added successfully!', 'Success!');
+
       this.getAllData();
     })
-   
+
     console.log(this.addPostForm.value);
-    this.submitted=false
+    this.submitted = false
   }
 
-  onSubmit1(){
-   this.submitted=true
-   if (this.changePassForm.invalid) {
-    return;
-    // /changePassword
-  }
-  console.log(this.changePassForm.value);
-  this.service.patch(`/changePassword/${this.userData._id}`,this.changePassForm.value).subscribe((data)=>{
-      console.log(data);
-     this.password=false
-  },(err)=>{
-    if(err.error){
-      this.passErr=err.error
-      this.password=true
+  changePass() {
+    this.submitted = true
+    if (this.changePassForm.invalid) {
+      return;
+      // /changePassword
     }
-  })
+    console.log(this.changePassForm.value);
+    this.service.patch(`/changePassword/${this.userData._id}`, this.changePassForm.value).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('password changed successfully!', 'Success!');
+
+      this.password = false
+    }, (err) => {
+      if (err.error) {
+        this.passErr = err.error
+        this.password = true
+      }
+    })
   }
 }
 
