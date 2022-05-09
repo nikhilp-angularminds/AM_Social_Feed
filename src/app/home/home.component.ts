@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../services/http.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap'
+
 import { catchError, pipe } from 'rxjs';
 @Component({
   selector: 'app-home',
@@ -17,17 +19,22 @@ export class HomeComponent implements OnInit {
   id: any
   index1: any
   userName:any
+  name:any
   image:any
   isLoading:boolean=false
   notEmptyPost = true;
   notscrolly = true;
-  constructor(private toastr: ToastrService,private router: Router, private service: HttpService) { }
+  userId:any
+  closeResult = '';
+  constructor(private modalService: NgbModal,private toastr: ToastrService,private router: Router, private service: HttpService) { }
 
   // showSuccess() {
   //   this.toastr.success('Hello world!', 'Success!');
   // }
   ngOnInit(): void {
     // ?page=1&limit=2
+    this.getAllPost();
+
     this.isLoading=true
 
     console.log(this.likes)
@@ -37,12 +44,12 @@ export class HomeComponent implements OnInit {
     else if (this.likes === 0) {
       this.like = false
     }
-    this.getAllPost();
     this.userData = localStorage.getItem("user")
     this.userData = JSON.parse(this.userData)
     this.userName=this.userData.name
+    this.userId=this.userData._id
     console.log(this.userData)
-    this.getEditData();
+    this.getUserData();
   }
   onScroll() {
     if (this.notscrolly && this.notEmptyPost) {
@@ -74,17 +81,35 @@ export class HomeComponent implements OnInit {
   //    });
   // }
 
-    getEditData(){
+    getUserData(){
     this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
          console.log(data);
         if(data){
           this.image=data.img
-          this.userName=JSON.parse(data.name)
-          console.log(this.image)
-          console.log(this.userName)
+          this.name=JSON.parse(data.name)
+          console.log(this.name)
         }
        })
      }
+     open(content: any) {
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+  
+    private getDismissReason(reason: any): string {
+      if (reason === ModalDismissReasons.ESC) {
+        return 'by pressing ESC';
+      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return `with: ${reason}`;
+      }
+    }
+  
+  
  
   getAllPost(){
     setTimeout(()=>{
@@ -92,6 +117,16 @@ export class HomeComponent implements OnInit {
         console.log(data)
         this.postArr = data.results
         this.postArr=this.postArr.reverse()
+        this.postArr.map((res:any)=>{
+         
+              if(res.likes.includes(this.userData._id)){
+                   res["like"]=true
+              }
+              else{
+                res["like"]=false
+                 
+              }
+        })
         console.log(this.postArr);
       }, (err) => {
         console.log(err)
@@ -114,21 +149,24 @@ export class HomeComponent implements OnInit {
 
       }
       this.likes = data.likes?.length
-      if (this.likes == undefined) {
-        this.likes = 0
-        console.log(this.likes)
+      console.log(this.likes)
+
+      if (data.message=="The post has been disliked") {
+       this.likes= data.postInfo.likes.length
+       this.id =data.postInfo._id
+       this.like=false
+       console.log(this.likes)
       }
 
-      if (this.likes === 1) {
+      if (data.likes.includes(this.userData._id) ) {
         this.like = true
       }
       else {
         this.like = false
       }
-      console.log(this.likes)
     })
 
-    // 626ceebd77198639072eeadb/like
+    // 626ceebd77198639072eeadb/like 
 
   }
   hide(i: any) {
@@ -143,10 +181,22 @@ export class HomeComponent implements OnInit {
     console.log(payload)
     this.service.put(`/${this.postArr[index]._id}/comment`, payload).subscribe((data: any) => {
       console.log(data)
-      this.getAllPost();
-      // this.hideCard=!this.hideCard
-
-    })
+      this.service.secureGet("?page=1&limit=20").subscribe((data: any) => {
+        console.log(data)
+        this.postArr = data.results
+        this.postArr=this.postArr.reverse()
+        this.postArr.map((res:any)=>{
+         
+              if(res.likes.includes(this.userData._id)){
+                   res["like"]=true
+              }
+              else{
+                res["like"]=false
+                 
+              }
+        })
+      })
+   })
 
   }
 }

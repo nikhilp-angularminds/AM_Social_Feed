@@ -15,8 +15,7 @@ export class EditComponent implements OnInit {
   userData: any
   img: any
   editgender: any
-  formData = new FormData();
-
+  uploadImg:any
   constructor(private router: Router, private toastr: ToastrService, private service: HttpService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -26,7 +25,7 @@ export class EditComponent implements OnInit {
       bio: '',
       gender: ['', Validators.required],
       dob: '',
-      email: ['', [Validators.required, Validators.email]],
+      // email: ['', [Validators.required, Validators.email]],
       mobileNumber: ['']
       // mobile:['', Validators.compose([Validators.required,Validators.pattern(
       //   '(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})'
@@ -36,6 +35,10 @@ export class EditComponent implements OnInit {
     this.userData = JSON.parse(this.userData)
     console.log(this.userData)
 
+     this.getUserData();
+  }
+
+  getUserData() {
     this.service.secureGet(`/user/${this.userData._id}`).subscribe((data: any) => {
       console.log(data);
       this.img = data.img
@@ -43,7 +46,7 @@ export class EditComponent implements OnInit {
       console.log(this.img)
       this.editForm.patchValue({
         name: JSON.parse(data.name),
-        email: JSON.parse(data.email),
+        // email: JSON.parse(data.email),
         bio: JSON.parse(data.bio),
         gender: (data.gender),
         dob: data.dob,
@@ -53,50 +56,50 @@ export class EditComponent implements OnInit {
       })
     })
   }
-
-  getEditData() {
-    this.service.secureGet(`/user/${this.userData._id}`).subscribe((data) => {
-      console.log(data);
-    })
-  }
   get f() {
     return this.editForm.controls;
   }
 
   onFileSelected(event: any) {
-    this.formData.append("img", event.target.files[0]);
-    console.log(event.target.files[0])
+    const fileReader=new FileReader()
+    fileReader.onload = (e: any) => {
+      this.uploadImg= e.target.result;
+    };
+    fileReader.readAsDataURL(event.target.files[0]);
+    this.uploadImg=event.target.files[0]
+    this.editForm.patchValue({
+      img:event.target.files[0]
+    })
+
   }
   onSubmit() {
     this.submitted = true
     if (this.editForm.invalid) {
       return;
     }
+     const formData = new FormData();
 
-    this.formData.append("name", JSON.stringify(this.editForm.value.name))
-    this.formData.append("bio", JSON.stringify(this.editForm.value.bio))
-    this.formData.append("gender", JSON.stringify(this.editForm.value.gender))
-    this.formData.append("dob", JSON.stringify(this.editForm.value.dob))
-    this.formData.append("email", JSON.stringify(this.editForm.value.email))
-    this.formData.append("mobileNumber", JSON.stringify(this.editForm.value.mobileNumber))
+    formData.append("img", this.editForm.value.img)
+    formData.append("name", JSON.stringify(this.editForm.value.name))
+    formData.append("bio", JSON.stringify(this.editForm.value.bio))
+    formData.append("gender", JSON.stringify(this.editForm.value.gender))
+    formData.append("dob", JSON.stringify(this.editForm.value.dob))
+    // formData.append("email", JSON.stringify(this.editForm.value.email))
+    formData.append("mobileNumber", JSON.stringify(this.editForm.value.mobileNumber))
 
-    console.log(this.formData)
+    console.log(formData)
     console.log(this.editForm.value)
 
-    this.service.put(`/edit-profile/${this.userData._id}`, this.formData).subscribe((data) => {
+    this.service.put(`/edit-profile/${this.userData._id}`, formData).subscribe((data) => {
       console.log(data)
       this.toastr.success('Profile updated successfully!', 'Success!');
       this.router.navigate(['feed'])
-
-      setTimeout(() => {
-        this.getEditData()
-      }, 2000);
     })
 
-    this.formData.forEach((item: any) => {
-      this.formData.delete(item)
-      console.log(item);
-    })
+    // this.formData.forEach((item: any) => {
+    //   this.formData.delete(item)
+    //   console.log(item);
+    // })
 
   }
 }

@@ -85,12 +85,13 @@ export class NavComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
+    
     this.formData.append("img", event.target.files[0]);
     console.log(event.target.files[0])
   }
 
   logout() {
-    localStorage.removeItem('user')
+    localStorage.clear();
     this.router.navigate(['login'])
   }
   getAllData() {
@@ -113,8 +114,6 @@ export class NavComponent implements OnInit {
     this.service.securePost("/uploadImage", this.formData).subscribe((data) => {
       console.log(data)
       this.toastr.success('New post added successfully!', 'Success!');
-
-      this.getAllData();
     })
 
     console.log(this.addPostForm.value);
@@ -128,7 +127,7 @@ export class NavComponent implements OnInit {
       // /changePassword
     }
     console.log(this.changePassForm.value);
-    this.service.patch(`/changePassword/${this.userData._id}`, this.changePassForm.value).subscribe((data) => {
+    this.service.put(`/changePassword/${this.userData._id}`, this.changePassForm.value).subscribe((data) => {
       console.log(data);
       this.toastr.success('password changed successfully!', 'Success!');
 
@@ -136,6 +135,7 @@ export class NavComponent implements OnInit {
     }, (err) => {
       if (err.error) {
         this.passErr = err.error
+         console.log(err)
         this.password = true
       }
     })

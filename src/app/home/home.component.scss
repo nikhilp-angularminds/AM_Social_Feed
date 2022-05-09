@@ -4,6 +4,7 @@ body{
     // background-color: #EFEFEF;
     height: 100vh;
 }
+
 .card-title{
     width: 600px;
     height: 55px;
@@ -17,6 +18,7 @@ body{
 }
 .fcard{
     width: 600px !important;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 .card-body1{
     width: 600px;

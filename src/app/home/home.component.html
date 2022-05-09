@@ -1,103 +1,114 @@
-<body>
+<body >
   <app-nav></app-nav>
-  <!-- <button class="btn btn-success" (click)="showSuccess()">add</button> -->
-  <div class="container mt-5">
-  <!-- <pre>  {{ postArr | json }}</pre> -->
-    <div  class="row">
-      <div *ngFor="let item of postArr;let i=index" class="col-md-12 d-flex justify-content-center mb-4"
-      infinite-scroll 
-   
-      (scrolled)="onScroll()"  >
-        <div class="fcard card" style="width: 18rem;">
-          <div *ngIf="!isLoading; else loadingContent" class="d-flex">
-            <div class="card-title d-flex align-items-center ms-2">
-              <ngx-avatars class="" src="http://localhost:3000/{{item.userImg}}" data-bs-toggle="dropdown"
-                aria-expanded="false" name={{item.userName}} size="30" [round]="true">
-              </ngx-avatars>
-            </div>
-            <div>
-              <!-- <h5 class="card-title d-flex align-items-center ms-2">{{userName}}</h5> -->
-
-              <div *ngIf="item.userName; else elseBlock">
-                <h5  class="card-title d-flex align-items-center ms-2">{{item.userName}}</h5>
-              </div>
-               <ng-template #elseBlock >
-                <h5 class="card-title d-flex align-items-center ms-2">{{userName}}</h5>
-               </ng-template>
-            </div>
-         </div>
-          <ng-template #loadingContent>
-            <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
-            <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
-          </ng-template>
-         
-          <img *ngIf="!isLoading; else loadingContent" class="card-img-top" src="http://localhost:3000/{{item.img}}" alt="">
-          <ng-template #loadingContent>
-            <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
-            <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
-          </ng-template>
-          
-          <div *ngIf="!isLoading; else loadingContent">
-            <div class="card-body1 d-flex">
-              <div class="icon">
-                <a (click)="onLikes(i)">
-                  <i *ngIf="item._id!=id" class="fa fa-heart" aria-hidden="true"></i>
-                  <i *ngIf="item._id==id" [ngClass]="[ like ? 'fa fa-heart my_class' : 'fa fa-heart']"
-                    aria-hidden="true"></i>
-                </a>
-              </div>
-              <div class="icon">
-                <a (click)="hide(i)">
-                  <i class="fa fa-comment" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
-            <div *ngIf="hideCard && index1==i" class="card-text ms-3">
-              <div class="row">
-                <div class="col-md-6">
-                  <p class="m-1" *ngFor="let comments of item.comments">
-                    <span class="fw-bold">comment:</span> {{comments.comment}}
-                  </p>
+  <div class="container-fluid" style="background-color: #EAE7E7;">
+    <div class="container" >
+      <!-- <pre>  {{ postArr | json }}</pre> -->
+     
+        <div  class="row">
+          <div *ngFor="let item of postArr;let i=index" class="col-md-12 d-flex justify-content-center mb-4"
+          infinite-scroll 
+       
+          (scrolled)="onScroll()"  >
+        
+            <div class="fcard card mt-5" style="width: 18rem;">
+              <div *ngIf="!isLoading; else loadingContent" class="d-flex">
+                <div *ngIf="item.userId!=userId" class="card-title d-flex align-items-center ms-2">
+                  <ngx-avatars class="" src="http://localhost:3000/{{item.userImg}}" data-bs-toggle="dropdown"
+                    aria-expanded="false" name={{item.userName}} size="30" [round]="true">
+                  </ngx-avatars>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <input type="text" #comment class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                      placeholder="">
+                <div *ngIf="item.userId==userId" class="card-title d-flex align-items-center ms-2">
+                  <ngx-avatars class="" src="http://localhost:3000/{{image}}" data-bs-toggle="dropdown"
+                    aria-expanded="false" name={{image}} size="30" [round]="true">
+                  </ngx-avatars>
+                </div>
+                <div>
+                  <!-- <h5 class="card-title d-flex align-items-center ms-2">{{userName}}</h5> -->
+    
+                  <div *ngIf="item.userId!=userId; else elseBlock">
+                    <h5  class="card-title d-flex align-items-center ms-2">{{item.userName}}</h5>
+                  </div>
+                  <!-- userId -->
+                   <ng-template #elseBlock >
+                    <h5 class="card-title d-flex align-items-center ms-2">{{name}}</h5>
+                   </ng-template>
+                </div>
+             </div>
+              <ng-template #loadingContent>
+                <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
+                <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
+              </ng-template>
+             
+              <img *ngIf="!isLoading; else loadingContent" class="card-img-top" src="http://localhost:3000/{{item.img}}" alt="">
+              <ng-template #loadingContent>
+                <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
+                <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
+              </ng-template>
+              
+              <div *ngIf="!isLoading; else loadingContent">
+                <div class="card-body1 d-flex">
+                  <div class="icon">
+                    <a (click)="onLikes(i)">
+                      <i *ngIf="item._id!=id" [ngClass]="[ item.like==true ? 'fa fa-heart my_class' : 'fa fa-heart']" class="fa fa-heart" aria-hidden="true"></i>
+                      <i *ngIf="item._id==id" [ngClass]="[ like ? 'fa fa-heart my_class' : 'fa fa-heart']"
+                        aria-hidden="true"></i>
+                    </a>
+                  </div>
+                  <div class="icon">
+                    <a (click)="hide(i)">
+                      <i class="fa fa-comment" aria-hidden="true"></i>
+                    </a>
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <button (click)="addComment(comment.value,i)" class="btn btn-primary">Add Comment</button>
+                <div *ngIf="hideCard && index1==i" class="card-text ms-3">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p class="m-1" *ngFor="let comments of item.comments">
+                        <span class="fw-bold">{{name}}:</span> {{comments.comment}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <input type="text" #comment class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                          placeholder="">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <button (click)="addComment(comment.value,i)" class="btn btn-primary">Add Comment</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body2 d-flex">
+                  <div>
+                    <span *ngIf="item._id!=id" ([ngModel])="likes" class="me-1">{{item.likes.length}} likes</span>
+                    <span *ngIf="item._id==id" ([ngModel])="likes" class="me-1">{{likes}} likes</span>
+                  </div>
+                </div>
+                <div class="card-body3 mt-2">
+                  <div>
+                    <!-- <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName}} :</span> {{item.caption}} </p> -->
+      
+                    <div *ngIf="item.userName; else elseBlock">
+                      <p class="card-text"><span class="fw-bold">{{item.userName}} :</span> {{item.caption}} </p>
+                    </div>
+                     <ng-template #elseBlock >
+                      <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName}} :</span> {{item.caption}} </p>
+                     </ng-template>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="card-body2 d-flex">
-              <div>
-                <span *ngIf="item._id!=id" class="me-1">0 likes</span>
-                <span *ngIf="item._id==id" class="me-1">{{likes}} likes</span>
-              </div>
-            </div>
-            <div class="card-body3 mt-2">
-              <div>
-                <!-- <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName}} :</span> {{item.caption}} </p> -->
-  
-                <div *ngIf="item.userName; else elseBlock">
-                  <p class="card-text"><span class="fw-bold">{{item.userName}} :</span> {{item.caption}} </p>
-                </div>
-                 <ng-template #elseBlock >
-                  <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName}} :</span> {{item.caption}} </p>
-                 </ng-template>
-              </div>
+              <ng-template #loadingContent>
+                <ngx-skeleton height="19px" margin="8px 0 0 8px" width="30%"></ngx-skeleton>
+                <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
+                <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
+              </ng-template>
             </div>
           </div>
-          <ng-template #loadingContent>
-            <ngx-skeleton height="19px" margin="8px 0 0 8px" width="30%"></ngx-skeleton>
-            <ngx-skeleton height="24px" margin="8px 0 0 8px" width="50%"></ngx-skeleton>
-            <ngx-skeleton height="19px" margin="8px 0 0 8px"></ngx-skeleton>
-          </ng-template>
         </div>
       </div>
-    </div>
   </div>
+  
 </body>
+

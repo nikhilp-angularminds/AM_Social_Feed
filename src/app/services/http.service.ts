@@ -34,11 +34,11 @@ export class HttpService {
     const headers = { 'Authorization': this.token }
     return this.http.put(`${this.baseUrl}${url}`,payload,{ headers })
   }
-  patch(url:string,payload:any){
-    const headers = { 'Authorization': this.token }
+  // patch(url:string,payload:any){
+  //   const headers = { 'Authorization': this.token }
    
-    return this.http.patch(`${this.baseUrl}${url}`,payload,{headers})
-  }
+  //   return this.http.patch(`${this.baseUrl}${url}`,payload,{headers})
+  // }
   
 
 }
