@@ -7,6 +7,7 @@ import { ReadVarExpr } from '@angular/compiler';
 import { HttpService } from '../services/http.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { AppService } from '../services/app.service';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -30,7 +31,7 @@ export class NavComponent implements OnInit {
   imgage: any
   ediName: any
   password: boolean = false
-  constructor(private toastr: ToastrService, private http: HttpClient, private service: HttpService, private router: Router, private fb: FormBuilder, private modalService: NgbModal) { }
+  constructor(private appService:AppService, private toastr: ToastrService, private http: HttpClient, private service: HttpService, private router: Router, private fb: FormBuilder, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.userData = localStorage.getItem("user")
@@ -92,7 +93,7 @@ export class NavComponent implements OnInit {
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['login'])
+    this.router.navigate(['/login'])
   }
   getAllData() {
     this.service.secureGet("?page=1&limit=20").subscribe((data: any) => {
@@ -114,6 +115,12 @@ export class NavComponent implements OnInit {
     this.service.securePost("/uploadImage", this.formData).subscribe((data) => {
       console.log(data)
       this.toastr.success('New post added successfully!', 'Success!');
+      this.service.secureGet("?page=1&limit=20").subscribe((data: any) => {
+        console.log(data)
+        this.postArr = data.results
+        this.postArr = this.postArr.reverse()
+      this.appService.passValue(this.postArr)
+      })
     })
 
     console.log(this.addPostForm.value);

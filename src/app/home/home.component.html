@@ -7,8 +7,8 @@
         <div  class="row">
           <div *ngFor="let item of postArr;let i=index" class="col-md-12 d-flex justify-content-center mb-4"
           infinite-scroll 
-       
-          (scrolled)="onScroll()"  >
+         
+          (scrolled)="onScrollDown($event)"  >
         
             <div class="fcard card mt-5" style="width: 18rem;">
               <div *ngIf="!isLoading; else loadingContent" class="d-flex">
@@ -26,7 +26,7 @@
                   <!-- <h5 class="card-title d-flex align-items-center ms-2">{{userName}}</h5> -->
     
                   <div *ngIf="item.userId!=userId; else elseBlock">
-                    <h5  class="card-title d-flex align-items-center ms-2">{{item.userName}}</h5>
+                    <h5  class="card-title d-flex align-items-center ms-2">{{item.userName | string}}</h5>
                   </div>
                   <!-- userId -->
                    <ng-template #elseBlock >
@@ -91,10 +91,10 @@
                     <!-- <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName}} :</span> {{item.caption}} </p> -->
       
                     <div *ngIf="item.userName; else elseBlock">
-                      <p class="card-text"><span class="fw-bold">{{item.userName}} :</span> {{item.caption}} </p>
+                      <p class="card-text"><span class="fw-bold">{{item.userName | string1}} :</span> {{item.caption | string}} </p>
                     </div>
                      <ng-template #elseBlock >
-                      <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName}} :</span> {{item.caption}} </p>
+                      <p *ngIf="item.caption" class="card-text"><span class="fw-bold">{{userName | string1}} :</span> {{item.caption | string}} </p>
                      </ng-template>
                   </div>
                 </div>

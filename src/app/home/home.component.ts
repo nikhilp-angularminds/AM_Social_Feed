@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap'
 
 import { catchError, pipe } from 'rxjs';
+import { AppService } from '../services/app.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -26,13 +27,20 @@ export class HomeComponent implements OnInit {
   notscrolly = true;
   userId:any
   closeResult = '';
-  constructor(private modalService: NgbModal,private toastr: ToastrService,private router: Router, private service: HttpService) { }
+  sum = 20;
+  constructor(private appService:AppService,private modalService: NgbModal,private toastr: ToastrService,private router: Router, private service: HttpService) { }
 
   // showSuccess() {
   //   this.toastr.success('Hello world!', 'Success!');
   // }
   ngOnInit(): void {
-    // ?page=1&limit=2
+    this.appService.subject.subscribe(
+      data => 
+      {
+        console.log('next subscribed value: ' +  data);
+        this.postArr = data;
+      }
+    );
     this.getAllPost();
 
     this.isLoading=true
@@ -51,36 +59,26 @@ export class HomeComponent implements OnInit {
     console.log(this.userData)
     this.getUserData();
   }
-  onScroll() {
-    if (this.notscrolly && this.notEmptyPost) {
-      this.notscrolly = false;
-      // this.loadNextPost();
-     }
+  onScrollDown(ev: any) {
+    console.log("scrolled down!!", ev);
+
+    this.sum += 20;
+    this.appendItems();
+    
   }
 
-  // loadNextPost() {
-  //   const url = 'http://tlino.96.lt/api/getnextpost';
-  //   // return last post from the array
-  //   const lastPost = this.postArr[this.postArr.length - 1];
-  //   // get id of last post
-  //   const lastPostId = lastPost.id;
-  //   // sent this id as key value pare using formdata()
-  //   const dataToSend = new FormData();
-  //   dataToSend.append('id', lastPostId);
-  //   // call http request
-  //   this.service.securePost("/uploadImage", dataToSend)
-  //   .subscribe( (data: any) => {
-  //      const newPost = data[0];
-  
-  //      if (newPost.length === 0 ) {
-  //        this.notEmptyPost =  false;
-  //      }
-  //      // add newly fetched posts to the existing post
-  //      this.postArr = this.postArr.concat(newPost);
-  //      this.notscrolly = true;
-  //    });
-  // }
-
+  appendItems() {
+    this.addItems("push");
+  }
+  addItems(_method: string) {
+    for (let i = 0; i < this.sum; ++i) {
+      if( _method === 'push'){
+        this.postArr.push([i].join(""));
+      }else if( _method === 'unshift'){
+        this.postArr.unshift([i].join(""));
+      }
+    }
+  }
     getUserData(){
     this.service.secureGet(`/user/${this.userData._id}`).subscribe((data:any)=>{
          console.log(data);
